@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>カメラ部春合宿グループジェネレータ</title>
+</head>
+
+<body>
+  <div class="title">
+    カメラ部春合宿<br>グループジェネレーター
+  </div>
+
+
+  <div class="section">
+    <div class="topic">メンバー</div>
+    <div class="members"></div>
+  </div>
+
+  <div class="section">
+    <div class="form">
+        <div class="input">
+          グループ数: <input id="number-input" type="text" name="group" size="10">
+        </div>
+        <div class="button">グループ作成</div>
+      </div>
+    <div class="groups"></div>
+   </div>
+
+</body>
+
+<script>
+  let members = ["佐々木真啓", "小神寛晴", "本田修吾", "田中凌也", "今泉麗愛", "栗原悠", "古庄礼旺", "岡崎雅大", "安永悠里", "坂上優子", "神園光太", "敷田日智", "山口昂大", "冨重美海", "蓮田悠真"];
+
+  var membersDiv = document.getElementsByClassName("members")[0];
+
+  // メンバーの表示
+  for (let i in members) {
+    var div = document.createElement('div');
+    div.textContent = members[i];
+    div.classList.add("member");
+    membersDiv.appendChild(div);
+  }
+
+  document.getElementsByClassName("button")[0].onclick = function () {
+    var removeDiv = document.getElementsByClassName("groups")[0];
+    if (removeDiv.hasChildNodes()) {
+      // 子ノードを全削除
+      for (let i = removeDiv.childNodes.length - 1; i >= 0; i--) {
+        removeDiv.removeChild(removeDiv.childNodes[i]);
+      }
+    }
+
+    // メンバーシャッフル
+    var shuffledMembers = members.slice();
+    for (let i in shuffledMembers) {
+      rand = Math.floor(Math.random() * shuffledMembers.length);
+      [shuffledMembers[rand], shuffledMembers[i]] = [shuffledMembers[i], shuffledMembers[rand]];
+    }
+
+    // 与えられた数、班に分ける
+    var inputNumber = document.getElementById("number-input").value;
+    console.log(inputNumber);
+    var groups = Array(inputNumber);
+    var numberOfGroupMember = Math.round(Math.round((shuffledMembers.length / inputNumber) * 10) / 10)
+    for (let i = 0; i < inputNumber; i++) {
+      groups[i] = shuffledMembers.slice(0, numberOfGroupMember);
+      shuffledMembers = shuffledMembers.slice(numberOfGroupMember);
+    }
+
+    // 班を表示
+    var groupsDiv = document.getElementsByClassName("groups")[0];
+    for (let i in groups) {
+      var groupDiv = document.createElement('div');
+      groupDiv.classList.add("group");
+
+      var groupNameDiv = document.createElement('div');
+      groupNameDiv.classList.add("group-name");
+      var groupNumber = Number(i) + 1;
+      groupNameDiv.textContent = "Group " + groupNumber;
+      groupDiv.appendChild(groupNameDiv);
+
+      var membersDiv = document.createElement('div');
+      membersDiv.classList.add("members");
+
+      let groupMembers = groups[i];
+      for (let member in groupMembers) {
+        var memberDiv = document.createElement('div');
+        memberDiv.classList.add("member")
+        memberDiv.textContent = groupMembers[member];
+        membersDiv.appendChild(memberDiv);
+      }
+      groupDiv.appendChild(membersDiv);
+      groupsDiv.appendChild(groupDiv);
+    }
+  }
+
+</script>
+
+<style>
+  body {
+    font-family: 'Quicksand', 'Yu Gothic', 'YuGothic', 'Poppins', sans-serif;
+  }
+
+  .title {
+    margin: 25px 0;
+    text-align: center;
+    font-size: 28px;
+  }
+
+  .section {
+    font-size: 22px;
+    width: 80%;
+    margin: 20px auto;
+  }
+
+  .members {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 16px;
+    margin-left: 16px;
+  }
+
+  .member {
+    margin: 0 5px;
+  }
+
+  .form {
+    width: 50%;
+    font-size: 20px;
+    margin: 10px auto;
+    display: flex;
+  }
+
+  #number-input {
+    padding: 3px 0;
+  }
+
+  .button {
+    margin: 0 10px;
+    color: white;
+    font-size: 12px;
+    background-color: black;
+    padding: 8px 12px;
+    border-radius: 10px;
+  }
+
+  .group {
+    margin-bottom: 16px;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 16px;
+  }
+
+  .group-name {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+</style>
+
+</html>
